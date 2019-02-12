@@ -10,28 +10,16 @@ import UIKit
 
 class ViewController: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
     
-    @IBOutlet weak var fireCollectionView: UICollectionView!
-    
-    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return fireWidth * fireHeight
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell =  collectionView.dequeueReusableCell(withReuseIdentifier: "cell", for: indexPath)
-        let intensity = firePixelsArray[indexPath.row]
-        cell.backgroundColor = colors[intensity]
-        return cell
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        return CGSize(width: 18, height: 18)
-    }
-    
+    //MARK: - Variables
     var firePixelsArray: [Int] = []
     let colors: [UIColor] = [#colorLiteral(red: 0.02745098039, green: 0.02745098039, blue: 0.02745098039, alpha: 1),#colorLiteral(red: 0.1215686275, green: 0.02745098039, blue: 0.02745098039, alpha: 1),#colorLiteral(red: 0.1843137255, green: 0.05882352941, blue: 0.02745098039, alpha: 1),#colorLiteral(red: 0.2784313725, green: 0.05882352941, blue: 0.02745098039, alpha: 1),#colorLiteral(red: 0.3411764706, green: 0.09019607843, blue: 0.02745098039, alpha: 1),#colorLiteral(red: 0.4039215686, green: 0.1215686275, blue: 0.02745098039, alpha: 1),#colorLiteral(red: 0.4666666667, green: 0.1215686275, blue: 0.02745098039, alpha: 1),#colorLiteral(red: 0.5607843137, green: 0.1529411765, blue: 0.02745098039, alpha: 1),#colorLiteral(red: 0.6235294118, green: 0.1843137255, blue: 0.02745098039, alpha: 1),#colorLiteral(red: 0.6862745098, green: 0.2470588235, blue: 0.02745098039, alpha: 1),#colorLiteral(red: 0.7490196078, green: 0.2784313725, blue: 0.02745098039, alpha: 1),#colorLiteral(red: 0.7803921569, green: 0.2784313725, blue: 0.02745098039, alpha: 1),#colorLiteral(red: 0.8745098039, green: 0.3098039216, blue: 0.02745098039, alpha: 1),#colorLiteral(red: 0.8745098039, green: 0.3411764706, blue: 0.02745098039, alpha: 1),#colorLiteral(red: 0.8745098039, green: 0.3411764706, blue: 0.02745098039, alpha: 1),#colorLiteral(red: 0.8431372549, green: 0.3725490196, blue: 0.02745098039, alpha: 1),#colorLiteral(red: 0.8431372549, green: 0.3725490196, blue: 0.02745098039, alpha: 1),#colorLiteral(red: 0.8431372549, green: 0.4039215686, blue: 0.05882352941, alpha: 1),#colorLiteral(red: 0.8117647059, green: 0.4352941176, blue: 0.05882352941, alpha: 1),#colorLiteral(red: 0.8117647059, green: 0.4666666667, blue: 0.05882352941, alpha: 1),#colorLiteral(red: 0.8117647059, green: 0.4980392157, blue: 0.05882352941, alpha: 1),#colorLiteral(red: 0.8117647059, green: 0.5294117647, blue: 0.09019607843, alpha: 1),#colorLiteral(red: 0.7803921569, green: 0.5294117647, blue: 0.09019607843, alpha: 1),#colorLiteral(red: 0.7803921569, green: 0.5607843137, blue: 0.09019607843, alpha: 1),#colorLiteral(red: 0.7803921569, green: 0.5921568627, blue: 0.1215686275, alpha: 1),#colorLiteral(red: 0.7490196078, green: 0.6235294118, blue: 0.1215686275, alpha: 1),#colorLiteral(red: 0.7490196078, green: 0.6235294118, blue: 0.1215686275, alpha: 1),#colorLiteral(red: 0.7490196078, green: 0.6549019608, blue: 0.1529411765, alpha: 1),#colorLiteral(red: 0.7490196078, green: 0.6549019608, blue: 0.1529411765, alpha: 1),#colorLiteral(red: 0.7490196078, green: 0.6862745098, blue: 0.1843137255, alpha: 1),#colorLiteral(red: 0.7176470588, green: 0.6862745098, blue: 0.1843137255, alpha: 1),#colorLiteral(red: 0.7176470588, green: 0.7176470588, blue: 0.1843137255, alpha: 1),#colorLiteral(red: 0.7176470588, green: 0.7176470588, blue: 0.2156862745, alpha: 1),#colorLiteral(red: 0.8117647059, green: 0.8117647059, blue: 0.4352941176, alpha: 1),#colorLiteral(red: 0.8745098039, green: 0.8745098039, blue: 0.6235294118, alpha: 1),#colorLiteral(red: 0.937254902, green: 0.937254902, blue: 0.7803921569, alpha: 1),#colorLiteral(red: 1, green: 1, blue: 1, alpha: 1)]
     var fireWidth = 20
     var fireHeight = 36
     
+    //MARK: - Outlets
+    @IBOutlet weak var fireCollectionView: UICollectionView!
+    
+    //MARK: - View Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
         fireCollectionView.delegate = self
@@ -40,9 +28,10 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
         createFireDataStructure()
         createFireSource()
         
-        Timer.scheduledTimer(timeInterval: 0.0000001, target: self, selector: #selector(calculateFirePropagation), userInfo: nil, repeats: true)
+        Timer.scheduledTimer(timeInterval: 0.000001, target: self, selector: #selector(calculateFirePropagation), userInfo: nil, repeats: true)
     }
     
+    //MARK: - Custom Methods
     func createFireDataStructure() {
         //columnAmount = Int(view!.frame.width / (view!.frame.height / 36))
         let cellAmount = fireHeight * fireWidth
@@ -68,9 +57,9 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
         }
         renderFire()
     }
-
+    
     func updateFireIntensityPerPixel(currentPixelIndex: Int){
-       let belowPixelIndex = currentPixelIndex + fireWidth
+        let belowPixelIndex = currentPixelIndex + fireWidth
         
         if belowPixelIndex >= fireWidth * fireHeight {
             return
@@ -80,8 +69,8 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
         let belowFireIntensity = firePixelsArray[belowPixelIndex]
         let newFireIntensity = belowFireIntensity - decay >= 0 ? belowFireIntensity - decay : 0
         
-        if (currentPixelIndex - decay) >= 0 && (currentPixelIndex - decay) < 36 {
-            firePixelsArray[currentPixelIndex - decay] = newFireIntensity
+        if (currentPixelIndex - decay) >= 0 && (currentPixelIndex + decay) < fireWidth * fireHeight {
+            firePixelsArray[currentPixelIndex + decay] = newFireIntensity
         }
         
         //firePixelsArray[currentPixelIndex] = newFireIntensity
@@ -89,6 +78,22 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
     
     func renderFire() {
         fireCollectionView.reloadData()
+    }
+    
+    //MARK: - Necessary CollectionView Methods
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        return fireWidth * fireHeight
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        let cell =  collectionView.dequeueReusableCell(withReuseIdentifier: "cell", for: indexPath)
+        let intensity = firePixelsArray[indexPath.row]
+        cell.backgroundColor = colors[intensity]
+        return cell
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+        return CGSize(width: 18, height: 18)
     }
 }
 
